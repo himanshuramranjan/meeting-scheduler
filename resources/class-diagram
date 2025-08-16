@@ -1,0 +1,74 @@
++------------------+
+|      User        |
++------------------+
+| - userId: String |
+| - name: String   |
+| - email: String  |
++------------------+
+| + createMeeting()|
+| + respondToInvite()|
+| + viewCalendar() |
++------------------+
+          |
+          | 1
+          |--------------------+
+          |                    |
+          | owns               |
+          v                    |
++---------------------+        |
+|      Calendar       |        |
++---------------------+        |
+| - calendarId: String|        |
+| - owner: User       |        |
+| - meetings: List<Meeting>   |
++---------------------+        |
+| + addMeeting()      |        |
+| + removeMeeting()   |        |
+| + findAvailableSlots()|
++---------------------+        |
+                               |
+                               |
+        +---------------------------------------------+
+        |                                             |
+        | 1                                           | *
+        v                                             v
++---------------------+                    +---------------------+
+|      Meeting        |                    |    MeetingRoom      |
++---------------------+                    +---------------------+
+| - meetingId: String |                    | - roomId: String    |
+| - title: String     |                    | - name: String      |
+| - organizer: User   |                    | - capacity: int     |
+| - participants: List<User>               | - status: Enum      |
+| - interval: Interval|                    | - bookings: List<Interval> |
+| - room: MeetingRoom |                    +---------------------+
+| - status: Enum      |                    | + checkAvailability()|
++---------------------+                    | + book()            |
+| + schedule()        |                    | + release()         |
+| + cancel()          |                    +---------------------+
+| + reschedule()      |
+| + sendInvite()      |
++---------------------+
+        |
+        | 1
+        v
++------------------+
+|     Interval     |
++------------------+
+| - startTime: DateTime |
+| - endTime: DateTime   |
++------------------+
+| + overlapsWith() |
+| + duration()     |
++------------------+
+
++-----------------------+
+|     Notification      |
++-----------------------+
+| - notificationId: String |
+| - recipient: User        |
+| - message: String        |
+| - sentTime: DateTime     |
++-----------------------+
+| + send()             |
+| + notify()           |
++-----------------------+
