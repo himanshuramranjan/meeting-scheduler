@@ -1,0 +1,44 @@
+          +-----------------+
+          |      User       |
+          +-----------------+
+                    |
+                    | 1. Request to create meeting
+                    v
+          +-----------------+
+          |   Calendar      |
+          +-----------------+
+                    |
+                    | 2. Check user availability (conflict?)
+                    v
+          +-----------------+
+          |   MeetingRoom   |
+          +-----------------+
+                    |
+                    | 3. Check room availability
+                    v
+          +-----------------+
+          |    Interval     |
+          +-----------------+
+                    |
+        +---------------------------+
+        | Conflict?                 |
+        |   Yes --> Reject/Reschedule|
+        |   No  --> Proceed          |
+        +---------------------------+
+                    |
+                    v
+          +-----------------+
+          |    Meeting      |
+          +-----------------+
+                    |
+                    | 4. Save meeting in calendar
+                    v
+          +-----------------+
+          | Notification    |
+          +-----------------+
+                    |
+                    | 5. Send invites to participants
+                    v
+          +-----------------+
+          |  Participants   |
+          +-----------------+
