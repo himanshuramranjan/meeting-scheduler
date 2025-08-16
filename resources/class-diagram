@@ -1,74 +1,72 @@
-+------------------+
-|      User        |
-+------------------+
-| - userId: String |
-| - name: String   |
-| - email: String  |
-+------------------+
-| + createMeeting()|
-| + respondToInvite()|
-| + viewCalendar() |
-+------------------+
-          |
-          | 1
-          |--------------------+
-          |                    |
-          | owns               |
-          v                    |
-+---------------------+        |
-|      Calendar       |        |
-+---------------------+        |
-| - calendarId: String|        |
-| - owner: User       |        |
-| - meetings: List<Meeting>   |
-+---------------------+        |
-| + addMeeting()      |        |
-| + removeMeeting()   |        |
-| + findAvailableSlots()|
-+---------------------+        |
-                               |
-                               |
-        +---------------------------------------------+
-        |                                             |
-        | 1                                           | *
-        v                                             v
-+---------------------+                    +---------------------+
-|      Meeting        |                    |    MeetingRoom      |
-+---------------------+                    +---------------------+
-| - meetingId: String |                    | - roomId: String    |
-| - title: String     |                    | - name: String      |
-| - organizer: User   |                    | - capacity: int     |
-| - participants: List<User>               | - status: Enum      |
-| - interval: Interval|                    | - bookings: List<Interval> |
-| - room: MeetingRoom |                    +---------------------+
-| - status: Enum      |                    | + checkAvailability()|
-+---------------------+                    | + book()            |
-| + schedule()        |                    | + release()         |
-| + cancel()          |                    +---------------------+
-| + reschedule()      |
-| + sendInvite()      |
-+---------------------+
-        |
-        | 1
-        v
-+------------------+
-|     Interval     |
-+------------------+
-| - startTime: DateTime |
-| - endTime: DateTime   |
-+------------------+
-| + overlapsWith() |
-| + duration()     |
-+------------------+
++-------------------+                             +-------------------+
+|      User         |1                           *|     Calendar      |
++-------------------+<--------------------------->+-------------------+
+| - userId: String  |                             | - calendarId: Str |
+| - name: String    |                             | - owner: User     |
+| - email: String   |                             | - meetings: List<Meeting> |
++-------------------+                             +-------------------+
+| + viewCalendar()  |                             | + addMeeting(m:Meeting)   |
+| + respondToInvite(m:Meeting, status:RSVPStatus) | + removeMeeting(m:Meeting) |
+|                   |                             | + findAvailableSlots(i:Interval):List<Interval> |
++-------------------+                             +-------------------+
 
-+-----------------------+
-|     Notification      |
-+-----------------------+
+                1
+                | owns
+                v
++-------------------+                                           *-------------------------*
+|     Meeting       |<>---------------------------------------->|        User             |
++-------------------+                                           *-------------------------*
+| - meetingId: Str  |
+| - title: String   |
+| - organizer: User |
+| - participants: List<User> |
+| - interval: Interval |
+| - room: MeetingRoom |
+| - status: MeetingStatus (Scheduled, Canceled, Completed) |
+| - rsvpMap: Map<User, RSVPStatus> |
++-------------------+
+| + schedule()      |
+| + cancel()        |
+| + reschedule(i:Interval) |
+| + sendInvite()    |
++-------------------+
+
+                 *
+                 | books
+                 v
++-------------------+       1..*
+|   MeetingRoom     |<------------------------------------+  Interval
++-------------------+                                       +-------------------+
+| - roomId: String  |                                       | - startTime: Date |
+| - name: String    |                                       | - endTime: Date   |
+| - capacity: int   |                                       +-------------------+
+| - status: RoomStatus (Available,Booked) |                 | + overlapsWith(i:Interval):boolean |
+| - bookings: List<Interval>                                | + duration():long |
++-------------------+                                         +----------------+
+| + checkAvailability(i:Interval):boolean |
+| + book(i:Interval):boolean |
+| + release(i:Interval) |
++-------------------+
+
+                 *
+                 |
+                 v
++-------------------+
+|   Notification    |
++-------------------+
 | - notificationId: String |
-| - recipient: User        |
-| - message: String        |
-| - sentTime: DateTime     |
-+-----------------------+
-| + send()             |
-| + notify()           |
-+-----------------------+
+| - recipient: User |
+| - message: String |
+| - sentTime: Date  |
++-------------------+
+| + send()          |
+| + notifyUser()    |
++-------------------+
+
++-------------------+
+|   MeetingService  |
++-------------------+
+| + createMeeting(title:String, org:User, part:List<User>, i:Interval, room:MeetingRoom):Meeting |
+| + cancelMeeting(meetingId:String) |
+| + rescheduleMeeting(meetingId:String, newInterval:Interval) |
++-------------------+
