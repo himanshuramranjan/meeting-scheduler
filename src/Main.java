@@ -18,7 +18,7 @@ public class Main {
 
         Interval slot = new Interval(LocalDateTime.now().plusHours(1), LocalDateTime.now().plusHours(2));
 
-        MeetingService scheduler = new MeetingService(NotificationService.getInstance());
+        MeetingService scheduler = MeetingService.getInstance();
 
         Meeting meeting = scheduler.scheduleMeeting("Project Kickoff", alice, Arrays.asList(alice, bob), slot, room);
 
