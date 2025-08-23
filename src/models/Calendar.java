@@ -28,8 +28,7 @@ public class Calendar {
         return meetings.stream().anyMatch(m -> m.getInterval().overlapsWith(interval));
     }
 
-    public List<Interval> findAvailableSlots(Interval requested) {
-        // Simplified: return requested slot if no conflict
+    public List<Interval> isSlotAvailable(Interval requested) {
         if (!isConflict(requested)) return Collections.singletonList(requested);
         return Collections.emptyList();
     }
