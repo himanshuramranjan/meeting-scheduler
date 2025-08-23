@@ -1,7 +1,6 @@
 package models;
 
 import enums.MeetingStatus;
-import service.NotificationService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,27 +51,7 @@ public class Meeting {
         return participants;
     }
 
-    public void cancel() {
-        this.status = MeetingStatus.CANCELED;
+    public void cancel() { this.status = MeetingStatus.CANCELED; }
 
-        String message = String.format(
-                "Meeting canceled: %s | Originally scheduled: %s to %s",
-                getTitle(),
-                getInterval().start(),
-                getInterval().end()
-        );
-        NotificationService.getInstance().notifyUsers(participants, message);
-    }
-
-    public void reschedule(Interval newInterval) {
-        this.status = MeetingStatus.RESCHEDULED;
-
-        String message = String.format(
-                "Meeting rescheduled: %s | New Time: %s to %s",
-                title,
-                newInterval.start(),
-                newInterval.end()
-        );
-        NotificationService.getInstance().notifyUsers(participants, message);
-    }
+    public void reschedule() { this.status = MeetingStatus.RESCHEDULED; }
 }
