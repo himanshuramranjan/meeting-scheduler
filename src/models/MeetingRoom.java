@@ -26,4 +26,9 @@ public class MeetingRoom {
         }
         bookings.add(interval);
     }
+
+    public void release(Interval interval) {
+        bookings.remove(interval);
+    }
+
 }
