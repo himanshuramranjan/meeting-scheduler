@@ -5,11 +5,14 @@ import models.User;
 import java.util.List;
 
 public class NotificationService {
-    private static NotificationService instance;
     private NotificationService() {}
+
+    private static class NotificationServiceHolder {
+        private static final NotificationService INSTANCE = new NotificationService();
+    }
+
     public static NotificationService getInstance() {
-        if (instance == null) instance = new NotificationService();
-        return instance;
+        return NotificationServiceHolder.INSTANCE;
     }
 
     public void notifyUsers(List<User> recipients, String message) {
